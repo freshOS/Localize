@@ -1,6 +1,8 @@
 # Localize
 Keep iOS Localization files sane
 
+![Localize](https://raw.githubusercontent.com/s4cha/Localize/master/xcodeScreenshot.png)
+
 
 ## Why
 Because **Localization** files tend to **rot over time** and become a hassle to work with. **Stressful** when you have to test your app against many different Localizations.
