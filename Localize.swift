@@ -43,6 +43,12 @@ let ignoredFromUnusedKeys = [
 ]
 */
 
+let masterLanguage = "en"
+let supportedLanguages = ["en", "fr", "es"]
+
+
+
+
 var ignoredFromSameTranslation = [String:[String]]()
 
 
@@ -106,10 +112,11 @@ struct LocalizationFiles {
 
 // MARK: - Load Localisation Files in memory
 
-let en = LocalizationFiles(name: "en")
-let es = LocalizationFiles(name: "es")
-let fr = LocalizationFiles(name: "fr")
-let localizationFiles = [fr, es]
+
+let masterLocalizationfile = LocalizationFiles(name: masterLanguage)
+let localizationFiles = supportedLanguages
+    .filter { $0 != masterLanguage }
+    .map { LocalizationFiles(name: $0) }
 
 
 
@@ -141,7 +148,7 @@ while let swiftFileLocation = enumerator?.nextObject() as? String {
     }
 }
 
-var masterKeys = Set(en.keyValue.keys)
+var masterKeys = Set(masterLocalizationfile.keyValue.keys)
 let usedKeys = Set(localizedStrings)
 let ignored = Set(ignoredFromUnusedKeys)
 let unused = masterKeys.subtracting(usedKeys).subtracting(ignored)
@@ -150,7 +157,7 @@ let unused = masterKeys.subtracting(usedKeys).subtracting(ignored)
 var replaceCommand = "\"("
 var counter = 0
 for v in unused {
-    var str = "\(path)/\(en.name).lproj/Localizable.strings:\(en.linesNumbers[v]!): "
+    var str = "\(path)/\(masterLocalizationfile.name).lproj/Localizable.strings:\(masterLocalizationfile.linesNumbers[v]!): "
     str += "error : [Unused Key] \"\(v)\" is never used"
     print(str)
     numberOfErrors += 1
@@ -170,9 +177,9 @@ print(replaceCommand)
 // MARK: - Compare each translation file against master (en)
 
 for file in localizationFiles {
-    for k in en.keyValue.keys {
+    for k in masterLocalizationfile.keyValue.keys {
         if let v = file.keyValue[k] {
-            if v == en.keyValue[k] {
+            if v == masterLocalizationfile.keyValue[k] {
                 if !ignoredFromSameTranslation[file.name]!.contains(k) {
                     var str = "\(path)/\(file.name).lproj/Localizable.strings"
                     + ":\(file.linesNumbers[k]!): "
@@ -183,7 +190,7 @@ for file in localizationFiles {
                 }
             }
         } else {
-            var str = "\(path)/\(file.name).lproj/Localizable.strings:\(en.linesNumbers[k]!): "
+            var str = "\(path)/\(file.name).lproj/Localizable.strings:\(masterLocalizationfile.linesNumbers[k]!): "
             str += "error: [Missing] \"\(k)\" missing form \(file.name.uppercased()) file"
             print(str)
             numberOfErrors += 1
