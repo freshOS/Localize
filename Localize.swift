@@ -48,6 +48,7 @@ var ignoredFromSameTranslation = [String:[String]]()
 
 let path = FileManager.default.currentDirectoryPath + relativeLocalizableFolders
 var numberOfWarnings = 0
+var numberOfErrors = 0
 
 struct LocalizationFiles {
     var name = ""
@@ -90,7 +91,7 @@ struct LocalizationFiles {
                         + "error : [Redundance] \"\(key)\" "
                         + "is redundant in \(name.uppercased()) file"
                         print(str)
-                        numberOfWarnings += 1
+                        numberOfErrors += 1
                     } else {
                         keyValue[key] = value
                         linesNumbers[key] = lineNumber+1
@@ -152,6 +153,7 @@ for v in unused {
     var str = "\(path)/\(en.name).lproj/Localizable.strings:\(en.linesNumbers[v]!): "
     str += "error : [Unused Key] \"\(v)\" is never used"
     print(str)
+    numberOfErrors += 1
     if counter != 0 {
         replaceCommand += "|"
     }
@@ -184,8 +186,16 @@ for file in localizationFiles {
             var str = "\(path)/\(file.name).lproj/Localizable.strings:\(en.linesNumbers[k]!): "
             str += "error: [Missing] \"\(k)\" missing form \(file.name.uppercased()) file"
             print(str)
+            numberOfErrors += 1
         }
     }
 }
 
 print("Number of warnings : \(numberOfWarnings)")
+print("Number of errors : \(numberOfErrors)")
+
+if numberOfErrors > 0 {
+    exit(1)
+}
+
+

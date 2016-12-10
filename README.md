@@ -89,7 +89,5 @@ let patterns = [
 - `ignoredFromUnusedKeys` find a way to pass that as a param?
 - Removes default top comments at the moment, not cool
 - Full Swift, do not use Sed & Awk to sort, clean etc.
-- emit nonzero exit code when failing
-`Command /bin/sh emitted errors but did not return a nonzero exit code to indicate failure`
 - multilanguage ? en, fr es are hardcodes at the moment
 - Simplify intergration as much as we can
