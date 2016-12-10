@@ -60,10 +60,25 @@ let masterLanguage = "en"
 
 
 
+// Detect list of supported languages automatically
+func listSupportedLanguages() -> [String] {
+    var sl = [String]()
+    let path = FileManager.default.currentDirectoryPath + relativeLocalizableFolders
+    let enumerator: FileManager.DirectoryEnumerator? = FileManager.default.enumerator(atPath: path)
+    let extensionName = "lproj"
+    while let element = enumerator?.nextObject() as? String {
+        if element.hasSuffix(extensionName) {
+            print(element)
+            let name = element.replacingOccurrences(of: ".\(extensionName)", with: "")
+            sl.append(name)
+        }
+    }
+    return sl
+}
 
+
+let supportedLanguages = listSupportedLanguages()
 var ignoredFromSameTranslation = [String:[String]]()
-
-
 let path = FileManager.default.currentDirectoryPath + relativeLocalizableFolders
 var numberOfWarnings = 0
 var numberOfErrors = 0
