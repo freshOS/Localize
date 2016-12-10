@@ -69,6 +69,8 @@ Example :
 This will take care of ignoring `[Potentialy Untranslated] "XXX" in FR file doesn't seem to be localized`
 
 ### Unused false positive
+
+### Not found by the script reason 1
 The script parses your project sources and checks if your keys are called within `NSLocalizedString` calls.
 But chances are you have a helper for a shorter NSLocalizedString syntax.
 This is indeed supported but you have to give the script what to look for.
@@ -84,10 +86,23 @@ let patterns = [
 ]
 ```
 
+### Not found by the script reason 2
+Another common pattern is to have keys being built at runtime,
 
-## TODO
-- `ignoredFromUnusedKeys` find a way to pass that as a param?
+Of course thoses keys are not present at compile time so the script can't know about them and emits false positive errors.
+You can add those keys at the top of of the script to prevent this from happening:
+
+```swift
+let ignoredFromUnusedKeys = [
+    "NotificationNoOne",
+    "NotificationCommentPhoto",
+    "NotificationCommentHisPhoto",
+    "NotificationCommentHerPhoto"
+]
+```
+
+## Fututre Improvements
+- `ignoredFromUnusedKeys` find a way to pass that as a param? use // flag? ignore-unused-error
 - Removes default top comments at the moment, not cool
 - Full Swift, do not use Sed & Awk to sort, clean etc.
-- multilanguage ? en, fr es are hardcodes at the moment
 - Simplify intergration as much as we can

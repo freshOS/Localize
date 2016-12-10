@@ -9,6 +9,7 @@ import Foundation
 // 3. Find Duplicate keys
 // 4. Find Unused keys and generate script to delete them all at once
 
+
 /*
  Put your path here, example ->  Resources/Localizations/Languages
  */
@@ -47,6 +48,19 @@ let masterLanguage = "en"
 let supportedLanguages = ["en", "fr", "es"]
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// MARK: - End Of Configurable Section
 
 
 var ignoredFromSameTranslation = [String:[String]]()
