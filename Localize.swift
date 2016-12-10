@@ -33,7 +33,7 @@ let patterns = [
  For instance, Keys that you concatenate will not be detected by the parsing
  so you want to add them here in order not to create false positives :)
  */
-let ignoredFromUnusedKeys = []
+let ignoredFromUnusedKeys = [String]()
 /* example
 let ignoredFromUnusedKeys = [
     "NotificationNoOne",
