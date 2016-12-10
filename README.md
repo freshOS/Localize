@@ -1,5 +1,13 @@
 # Localize
 
+[![Language: Swift](https://img.shields.io/badge/language-swift-f48041.svg?style=flat)](https://developer.apple.com/swift)
+![Platform: iOS](https://img.shields.io/badge/platform-iOS-blue.svg?style=flat)
+[![codebeat badge](https://codebeat.co/badges/158a502c-1e18-4239-8301-a7ff79160b60)](https://codebeat.co/projects/github-com-s4cha-localize)
+[![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/s4cha/Localize/blob/master/LICENSE)
+[![Release version](https://img.shields.io/badge/release-0.1-blue.svg)]()
+
+
+
 ⚠️ Not production ready yet ! Soon :)
 
 Keep iOS Localization files sane
