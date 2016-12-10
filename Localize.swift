@@ -45,7 +45,6 @@ let ignoredFromUnusedKeys = [
 */
 
 let masterLanguage = "en"
-let supportedLanguages = ["en", "fr", "es"]
 
 
 
@@ -60,7 +59,6 @@ let supportedLanguages = ["en", "fr", "es"]
 
 
 
-// MARK: - End Of Configurable Section
 
 
 var ignoredFromSameTranslation = [String:[String]]()
