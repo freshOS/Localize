@@ -1,4 +1,7 @@
 # Localize
+
+⚠️ Not production ready yet ! Soon :)
+
 Keep iOS Localization files sane
 
 ![Localize](https://raw.githubusercontent.com/s4cha/Localize/master/xcodeScreenshot.png)
