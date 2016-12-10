@@ -48,9 +48,6 @@ ${SRCROOT}/{REPLACE ME}}
 - Copy Localize.swift script in your project.
 - Modify `relativeLocalizableFolders`
 
-
-Configure "never used" keys.
-
 Run and Enjoy \o/
 
 ## More
@@ -63,7 +60,7 @@ Example :
 ```
 This will take care of ignoring `[Potentialy Untranslated] "XXX" in FR file doesn't seem to be localized`
 
-## Unused false positive
+### Unused false positive
 The script parses your project sources and checks if your keys are called within `NSLocalizedString` calls.
 But chances are you have a helper for a shorter NSLocalizedString syntax.
 This is indeed supported but you have to give the script what to look for.
@@ -82,8 +79,9 @@ let patterns = [
 
 ## TODO
 - `ignoredFromUnusedKeys` find a way to pass that as a param?
-- // Removes default top comments not cool
+- Removes default top comments at the moment, not cool
 - Full Swift, do not use Sed & Awk to sort, clean etc.
 - emit nonzero exit code when failing
 `Command /bin/sh emitted errors but did not return a nonzero exit code to indicate failure`
 - multilanguage ? en, fr es are hardcodes at the moment
+- Simplify intergration as much as we can
