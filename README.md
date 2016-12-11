@@ -7,9 +7,6 @@
 [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/s4cha/Localize/blob/master/LICENSE)
 [![Release version](https://img.shields.io/badge/release-0.1-blue.svg)]()
 
-
-⚠️ Not production ready yet ! Soon :)
-
 Keep iOS Localization files sane
 
 ![Localize](https://raw.githubusercontent.com/s4cha/Localize/master/xcodeScreenshot.png)
@@ -24,28 +21,28 @@ By using a **script** running automatically, you have a **safety net** keeping t
 ## What
 
 Automatically (On build)
-  - **Cleans** you localization files (removes comments and spaces)
+  - **Cleans** you localization files (removes spaces)
   - **Sorts** keys Alphabetically
   - Checks for **Unused Keys**
   - Checks for **Missing Keys**
   - Checks for **Untranslated** (which you can ignore with a flag)
 
-## Usage
+## Installation
 
-- Add the following `Run Script` in XCode, this will run the script at every build.
+Add the following `Run Script` in XCode, this will run the script at every build.
+Use the path of where you copied Localize.swift script
 
 ```shell
-${SRCROOT}/{REPLACE ME}}
-# Ex: ${SRCROOT}/Libs/Localize.swift
+${SRCROOT}/{REPLACE ME}} # Ex: ${SRCROOT}/Libs/Localize.swift
 ```
-- Use the path of where you copied Localize.swift script
-- Modify `relativeLocalizableFolders`
-
 Run and Enjoy \o/
+
+## Configuration
+Configure the top section of the `Localize.script` according to your project
 
 ## More
 
-### Ignore Same Translation warnings
+### Ignore [Potentialy Untranslated] warnings
 Just Add `//ignore-same-translation-warning` next to the translation.
 Example :
 ```
@@ -55,7 +52,7 @@ This will take care of ignoring `[Potentialy Untranslated] "XXX" in FR file does
 
 ### Unused false positive
 
-### Not found by the script reason 1
+#### Not found by the script reason 1
 The script parses your project sources and checks if your keys are called within `NSLocalizedString` calls.
 But chances are you have a helper for a shorter NSLocalizedString syntax.
 This is indeed supported but you have to give the script what to look for.
@@ -71,9 +68,8 @@ let patterns = [
 ]
 ```
 
-### Not found by the script reason 2
-Another common pattern is to have keys being built at runtime,
-
+#### Not found by the script reason 2
+Another common pattern is to have keys being built at runtime.
 Of course thoses keys are not present at compile time so the script can't know about them and emits false positive errors.
 You can add those keys at the top of of the script to prevent this from happening:
 
@@ -86,6 +82,14 @@ let ignoredFromUnusedKeys = [
 ]
 ```
 
-## Fututre Improvements
-- `ignoredFromUnusedKeys` find a way to pass that as a param? use // flag? ignore-unused-error
-- Simplify intergration as much as we can
+## Author
+
+Sacha Durand Saint Omer, sachadso@gmail.com
+
+## Contributing
+
+Contributions to Localize are very welcomed and encouraged!
+
+## License
+
+Localize is available under the MIT license. See [LICENSE](https://github.com/s4cha/Localize/blob/master/LICENSE) for more information.
