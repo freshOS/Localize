@@ -88,6 +88,4 @@ let ignoredFromUnusedKeys = [
 
 ## Fututre Improvements
 - `ignoredFromUnusedKeys` find a way to pass that as a param? use // flag? ignore-unused-error
-- Removes default top comments at the moment, not cool
-- Full Swift, do not use Sed & Awk to sort, clean etc.
 - Simplify intergration as much as we can
