@@ -94,6 +94,8 @@ struct LocalizationFiles {
     }
 
     mutating func process() {
+        removeEmptyLinesFromFile()
+        sortLinesAlphabetically()
         let location = "\(path)/\(name).lproj/Localizable.strings"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
             let lines =  string.components(separatedBy: CharacterSet.newlines)
@@ -133,11 +135,6 @@ struct LocalizationFiles {
             }
             print(ignoredFromSameTranslation)
             ignoredFromSameTranslation[name] = ignoredTranslation
-            
-            
-            
-            removeEmptyLinesFromFile()
-            sortLinesAlphabetically()
         }
     }
     
