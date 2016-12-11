@@ -35,25 +35,10 @@ Automatically (On build)
 - Add the following `Run Script` in XCode, this will run the script at every build.
 
 ```shell
-# 1 Folder containing your xx.lproj folders
-LOCALIZATIONS_FOLDER="$PROJECT_DIR/{ REPLACE ME 1}"
-## Ex : LOCALIZATIONS_FOLDER="$PROJECT_DIR/Resources/Languages"
-
-find $LOCALIZATIONS_FOLDER -name "*.strings" -exec sed -i '' '/^\/\// d' {} \;
-find $LOCALIZATIONS_FOLDER -name "*.strings" -exec sed -i '' '/^\/\*/ d' {} \;
-find $LOCALIZATIONS_FOLDER -name "*.strings" -exec sed -i '' '/^$/d' {} \;
-find $LOCALIZATIONS_FOLDER -name "*.strings" -exec sort -f {} -o {} \;
-
-# 2 Path to where you copied Localize.swift script
 ${SRCROOT}/{REPLACE ME}}
-# Ex: ${SRCROOT}/Libs/Localize
-
+# Ex: ${SRCROOT}/Libs/Localize.swift
 ```
-
-- Add the path of your localization files `1`
-- Add The path of Localize.swift script `2`
-
-- Copy Localize.swift script in your project.
+- Use the path of where you copied Localize.swift script
 - Modify `relativeLocalizableFolders`
 
 Run and Enjoy \o/

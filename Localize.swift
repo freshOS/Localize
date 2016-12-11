@@ -133,7 +133,69 @@ struct LocalizationFiles {
             }
             print(ignoredFromSameTranslation)
             ignoredFromSameTranslation[name] = ignoredTranslation
+            
+            
+            
+            removeEmptyLinesFromFile()
+            sortLinesAlphabetically()
         }
+    }
+    
+    func removeEmptyLinesFromFile() {
+        let location = "\(path)/\(name).lproj/Localizable.strings"
+        if let string = try? String(contentsOfFile: location, encoding: .utf8) {
+            let lines =  string.components(separatedBy: CharacterSet.newlines)
+            var s = ""
+            for l in removeEmptyLinesFromLines(lines) {
+                s += l
+                s += "\n"
+            }
+            try? s.write(toFile:location, atomically:false, encoding:String.Encoding.utf8)
+        }
+    }
+    
+    
+    func sortLinesAlphabetically() {
+        let location = "\(path)/\(name).lproj/Localizable.strings"
+        if let string = try? String(contentsOfFile: location, encoding: .utf8) {
+            let lines =  string.components(separatedBy: CharacterSet.newlines)
+            
+            // Ignore header commment lines
+            var linesHeaderComment = [String]()
+            var linesAfterHEaderComment = [String]()
+            var isHeaderComment = true
+            for l in lines {
+            
+                if l.hasPrefix("//") {
+                    linesHeaderComment.append(l)
+                } else {
+                    isHeaderComment = false
+                }
+                
+                if isHeaderComment == false {
+                    linesAfterHEaderComment.append(l)
+                }
+            }
+            
+            var s = ""
+            for l in linesHeaderComment {
+                s += l
+                s += "\n"
+            }
+            for l in sortAlphabetically(linesAfterHEaderComment) {
+                s += l
+                s += "\n"
+            }
+            try? s.write(toFile:location, atomically:false, encoding:String.Encoding.utf8)
+        }
+    }
+    
+    func removeEmptyLinesFromLines(_ lines:[String]) -> [String] {
+        return lines.filter { $0.trimmingCharacters(in: CharacterSet.whitespaces) != "" }
+    }
+    
+    func sortAlphabetically(_ lines:[String]) -> [String] {
+        return lines.sorted()
     }
 }
 
@@ -144,8 +206,6 @@ let masterLocalizationfile = LocalizationFiles(name: masterLanguage)
 let localizationFiles = supportedLanguages
     .filter { $0 != masterLanguage }
     .map { LocalizationFiles(name: $0) }
-
-
 
 // MARK: - Detect Unused Keys
 
