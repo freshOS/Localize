@@ -7,7 +7,8 @@
 [![License: MIT](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/s4cha/Localize/blob/master/LICENSE)
 [![Release version](https://img.shields.io/badge/release-0.1-blue.svg)]()
 
-Keep iOS Localization files sane
+*Localize* is a tiny run script that keeps your `Localizable.strings` files clean and emits warnings when something is suspicious.
+
 
 ![Localize](https://raw.githubusercontent.com/s4cha/Localize/master/xcodeScreenshot.png)
 
