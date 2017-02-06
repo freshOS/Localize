@@ -13,20 +13,22 @@
 ![Localize](https://raw.githubusercontent.com/s4cha/Localize/master/xcodeScreenshot.png)
 
 
-## Why
 Because **Localization** files tend to **rot over time** and become a hassle to work with. **Stressful** when you have to test your app against many different Localizations.
+
+## Try it!
+
+Localize is part of [freshOS](http://freshos.org) iOS toolset. Try it in an example App ! <a class="github-button" href="https://github.com/freshOS/StarterProject/archive/master.zip" data-icon="octicon-cloud-download" data-style="mega" aria-label="Download freshOS/StarterProject on GitHub">Download Starter Project</a>
 
 ## How
 By using a **script** running automatically, you have a **safety net** keeping them **sane**, checking for **translation issues** and preventing then to **rot over time.**
 
 ## What
-
 Automatically (On build)
-  - **Cleans** you localization files (removes spaces)
-  - **Sorts** keys Alphabetically
-  - Checks for **Unused Keys**
-  - Checks for **Missing Keys**
-  - Checks for **Untranslated** (which you can ignore with a flag)
+  - [x] **Cleans** you localization files (removes spaces)
+  - [x] **Sorts** keys Alphabetically
+  - [x] Checks for **Unused Keys**
+  - [x] Checks for **Missing Keys**
+  - [x] Checks for **Untranslated** (which you can ignore with a flag)
 
 ## Installation
 
