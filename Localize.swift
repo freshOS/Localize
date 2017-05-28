@@ -27,6 +27,7 @@ let relativeSourceFolder = ""
 let patterns = [
     "NSLocalizedString\\(@?\"(\\w+)\"", // Swift and Objc Native
     "Localizations\\.((?:[A-Z]{1}[a-z]*[A-z]*)*(?:\\.[A-Z]{1}[a-z]*[A-z]*)*)" // Laurine Calls
+    "L10n.tr\\(key: \"(\\w+)\""// SwiftGen generation
 ]
 
 /*
@@ -64,8 +65,13 @@ let masterLanguage = "en"
 func listSupportedLanguages() -> [String] {
     var sl = [String]()
     let path = FileManager.default.currentDirectoryPath + relativeLocalizableFolders
+    if !FileManager.default.fileExists(atPath: path) {
+        print("Invalid configuration: \(path) does not exist.")
+        exit(1)
+    }
     let enumerator: FileManager.DirectoryEnumerator? = FileManager.default.enumerator(atPath: path)
     let extensionName = "lproj"
+    print("Found these languages:")
     while let element = enumerator?.nextObject() as? String {
         if element.hasSuffix(extensionName) {
             print(element)
