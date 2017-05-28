@@ -89,6 +89,9 @@ let ignoredFromUnusedKeys = [
 
 Sacha Durand Saint Omer, sachadso@gmail.com
 
+## Contributors
+[JuliusBahr](https://github.com/JuliusBahr)
+
 ## Contributing
 
 Contributions to Localize are very welcomed and encouraged!
