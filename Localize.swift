@@ -26,7 +26,7 @@ let relativeSourceFolder = ""
  */
 let patterns = [
     "NSLocalizedString\\(@?\"(\\w+)\"", // Swift and Objc Native
-    "Localizations\\.((?:[A-Z]{1}[a-z]*[A-z]*)*(?:\\.[A-Z]{1}[a-z]*[A-z]*)*)" // Laurine Calls
+    "Localizations\\.((?:[A-Z]{1}[a-z]*[A-z]*)*(?:\\.[A-Z]{1}[a-z]*[A-z]*)*)", // Laurine Calls
     "L10n.tr\\(key: \"(\\w+)\""// SwiftGen generation
 ]
 
