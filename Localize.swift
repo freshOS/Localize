@@ -120,12 +120,12 @@ struct LocalizationFiles {
                 if let ignoredMatch = ignoredRegex?.firstMatch(in:line,
                                                                        options: [],
                                                                        range: range) {
-                    let key = (line as NSString).substring(with: ignoredMatch.rangeAt(1))
+                    let key = (line as NSString).substring(with: ignoredMatch.range(at:1))
                     ignoredTranslation.append(key)
                 }
                 if let firstMatch = regex?.firstMatch(in: line, options: [], range: range) {
-                    let key = (line as NSString).substring(with: firstMatch.rangeAt(1))
-                    let value = (line as NSString).substring(with: firstMatch.rangeAt(2))
+                    let key = (line as NSString).substring(with: firstMatch.range(at:1))
+                    let value = (line as NSString).substring(with: firstMatch.range(at:2))
                     if let _ =  keyValue[key] {
                         let str = "\(path)/\(name).lproj"
                         + "/Localizable.strings:\(linesNumbers[key]!): "
@@ -229,7 +229,7 @@ while let swiftFileLocation = enumerator?.nextObject() as? String {
                                                 range: range,
                                                 using: { (result, _, _) in
                     if let r = result {
-                        let value = (string as NSString).substring(with:r.rangeAt(1))
+                        let value = (string as NSString).substring(with:r.range(at:1))
                         localizedStrings.append(value)
                     }
                 })
