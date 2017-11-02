@@ -129,7 +129,7 @@ struct LocalizationFiles {
                     if let _ =  keyValue[key] {
                         let str = "\(path)/\(name).lproj"
                         + "/Localizable.strings:\(linesNumbers[key]!): "
-                        + "error : [Redundance] \"\(key)\" "
+                        + "error: [Redundance] \"\(key)\" "
                         + "is redundant in \(name.uppercased()) file"
                         print(str)
                         numberOfErrors += 1
@@ -248,7 +248,7 @@ var replaceCommand = "\"("
 var counter = 0
 for v in unused {
     var str = "\(path)/\(masterLocalizationfile.name).lproj/Localizable.strings:\(masterLocalizationfile.linesNumbers[v]!): "
-    str += "error : [Unused Key] \"\(v)\" is never used"
+    str += "error: [Unused Key] \"\(v)\" is never used"
     print(str)
     numberOfErrors += 1
     if counter != 0 {
