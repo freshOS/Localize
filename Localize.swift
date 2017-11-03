@@ -49,7 +49,7 @@ let masterLanguage = "en"
 
 
 /*
- Sanitizing files will remove comments, empy lines and order your keys alphabetically.
+ Sanitizing files will remove comments, empty lines and order your keys alphabetically.
  */
 let sanitizeFiles = true
 
