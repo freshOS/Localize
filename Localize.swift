@@ -48,7 +48,10 @@ let ignoredFromUnusedKeys = [
 let masterLanguage = "en"
 
 
-
+/*
+ Sanitizing files will remove comments, empy lines and order your keys alphabetically.
+ */
+let sanitizeFiles = true
 
 
 
@@ -100,8 +103,11 @@ struct LocalizationFiles {
     }
 
     mutating func process() {
-        removeEmptyLinesFromFile()
-        sortLinesAlphabetically()
+        if sanitizeFiles {
+            removeCommentsFromFile()
+            removeEmptyLinesFromFile()
+            sortLinesAlphabetically()
+        }
         let location = "\(path)/\(name).lproj/Localizable.strings"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
             let lines =  string.components(separatedBy: CharacterSet.newlines)
@@ -144,50 +150,43 @@ struct LocalizationFiles {
         }
     }
     
+    func rebuildFileString(from lines: [String]) -> String {
+        return lines.reduce("") { (r: String, s: String) -> String in
+            return (r == "") ? (r + s) : (r + "\n" + s)
+        }
+    }
+    
     func removeEmptyLinesFromFile() {
         let location = "\(path)/\(name).lproj/Localizable.strings"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
-            let lines =  string.components(separatedBy: CharacterSet.newlines)
-            var s = ""
-            for l in removeEmptyLinesFromLines(lines) {
-                s += l
-                s += "\n"
-            }
+            var lines = string.components(separatedBy: CharacterSet.newlines)
+            lines = lines.filter { $0.trimmingCharacters(in: CharacterSet.whitespaces) != "" }
+            let s = rebuildFileString(from: lines)
             try? s.write(toFile:location, atomically:false, encoding:String.Encoding.utf8)
         }
     }
     
+    func removeCommentsFromFile() {
+        let location = "\(path)/\(name).lproj/Localizable.strings"
+        if let string = try? String(contentsOfFile: location, encoding: .utf8) {
+            var lines = string.components(separatedBy: CharacterSet.newlines)
+            lines = lines.filter { !$0.hasPrefix("//") }
+            let s = rebuildFileString(from: lines)
+            try? s.write(toFile:location, atomically:false, encoding:String.Encoding.utf8)
+        }
+    }
     
     func sortLinesAlphabetically() {
         let location = "\(path)/\(name).lproj/Localizable.strings"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
-            let lines =  string.components(separatedBy: CharacterSet.newlines)
-            
-            // Ignore header commment lines
-            var linesHeaderComment = [String]()
-            var linesAfterHEaderComment = [String]()
-            var isHeaderComment = true
-            for l in lines {
-            
-                if l.hasPrefix("//") {
-                    linesHeaderComment.append(l)
-                } else {
-                    isHeaderComment = false
-                }
-                
-                if isHeaderComment == false {
-                    linesAfterHEaderComment.append(l)
-                }
-            }
+            let lines = string.components(separatedBy: CharacterSet.newlines)
             
             var s = ""
-            for l in linesHeaderComment {
+            for (i,l) in sortAlphabetically(lines).enumerated() {
                 s += l
-                s += "\n"
-            }
-            for l in sortAlphabetically(linesAfterHEaderComment) {
-                s += l
-                s += "\n"
+                if (i != lines.count - 1) {
+                    s += "\n"
+                }
             }
             try? s.write(toFile:location, atomically:false, encoding:String.Encoding.utf8)
         }
