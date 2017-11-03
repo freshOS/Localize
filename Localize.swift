@@ -271,7 +271,7 @@ for file in localizationFiles {
         if let v = file.keyValue[k] {
             if v == masterLocalizationfile.keyValue[k] {
                 if !ignoredFromSameTranslation[file.name]!.contains(k) {
-                    var str = "\(path)/\(file.name).lproj/Localizable.strings"
+                    let str = "\(path)/\(file.name).lproj/Localizable.strings"
                     + ":\(file.linesNumbers[k]!): "
                     + "warning: [Potentialy Untranslated] \"\(k)\""
                     + "in \(file.name.uppercased()) file doesn't seem to be localized"

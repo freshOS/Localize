@@ -1,0 +1,5 @@
+
+"IgnoredUntranslatedKey" = "OK";
+"MissingKey" = "Hey I'm not present in Spanish!";
+"NeverUsedKey" = "Hey I'm never used so you can just get rid of me!";
+"UntranslatedKey" = "Hey I'm always in english so you need to translate me!";
