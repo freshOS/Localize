@@ -90,7 +90,7 @@ let ignoredFromUnusedKeys = [
 Sacha Durand Saint Omer, sachadso@gmail.com
 
 ## Contributors
-[JuliusBahr](https://github.com/JuliusBahr)
+[JuliusBahr](https://github.com/JuliusBahr), [ezisazis](https://github.com/ezisazis/)
 
 ## Contributing
 
