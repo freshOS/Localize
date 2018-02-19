@@ -217,7 +217,7 @@ let enumerator = fileManager.enumerator(atPath:sourcesPath)
 var localizedStrings = [String]()
 while let swiftFileLocation = enumerator?.nextObject() as? String {
     // checks the extension // TODO OBJC?
-    if swiftFileLocation.hasSuffix(".swift") ||  swiftFileLocation.hasSuffix(".m") {
+    if swiftFileLocation.hasSuffix(".swift") ||  swiftFileLocation.hasSuffix(".m") || swiftFileLocation.hasSuffix(".mm") {
         let location = "\(sourcesPath)/\(swiftFileLocation)"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
             for p in patterns {
