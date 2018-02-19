@@ -53,8 +53,10 @@ let masterLanguage = "en"
  */
 let sanitizeFiles = true
 
-
-
+/*
+ Determines if there are multiple localizations or not.
+ */
+let singleLanguage = false
 
 // MARK: - End Of Configurable Section
 
@@ -108,7 +110,7 @@ struct LocalizationFiles {
             removeEmptyLinesFromFile()
             sortLinesAlphabetically()
         }
-        let location = "\(path)/\(name).lproj/Localizable.strings"
+        let location = singleLanguage ? "\(path)/Localizable.strings" : "\(path)/\(name).lproj/Localizable.strings"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
             let lines =  string.components(separatedBy: CharacterSet.newlines)
             keyValue = [String:String]()
