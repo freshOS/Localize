@@ -25,8 +25,7 @@ let relativeSourceFolder = ""
  Those are the regex patterns to recognize localizations.
  */
 let patterns = [
-    "NSLocalizedFormatString\\(@?\"([\\w\\.]+)\"",
-    "NSLocalizedString\\(@?\"([\\w\\.]+)\"", // Swift and Objc Native
+    "NSLocalized(Format)?String\\(@?\"([\\w\\.]+)\"", // Swift and Objc Native
     "Localizations\\.((?:[A-Z]{1}[a-z]*[A-z]*)*(?:\\.[A-Z]{1}[a-z]*[A-z]*)*)", // Laurine Calls
     "L10n.tr\\(key: \"(\\w+)\""// SwiftGen generation
 ]
