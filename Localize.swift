@@ -230,7 +230,7 @@ while let swiftFileLocation = enumerator?.nextObject() as? String {
                                                 range: range,
                                                 using: { (result, _, _) in
                     if let r = result {
-                        let value = (string as NSString).substring(with:r.range(at:1))
+                        let value = (string as NSString).substring(with:r.range(at:r.numberOfRanges-1))
                         localizedStrings.append(value)
                     }
                 })
