@@ -41,7 +41,7 @@ ${SRCROOT}/{REPLACE ME}} # Ex: ${SRCROOT}/Libs/Localize.swift
 Run and Enjoy \o/
 
 ## Configuration
-Configure the top section of the `Localize.script` according to your project
+Configure the top section of the `Localize.swift` according to your project
 
 ## More
 
