@@ -297,7 +297,7 @@ for file in localizationFiles {
             }
         } else {
             var str = "\(path)/\(file.name).lproj/Localizable.strings:\(masterLocalizationfile.linesNumbers[k]!): "
-            str += "error: [Missing] \"\(k)\" missing form \(file.name.uppercased()) file"
+            str += "error: [Missing] \"\(k)\" missing from \(file.name.uppercased()) file"
             print(str)
             numberOfErrors += 1
         }
