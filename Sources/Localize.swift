@@ -2,13 +2,11 @@
 
 import Foundation
 
-
 // WHAT
 // 1. Find Missing keys in other Localisation files
 // 2. Find potentially untranslated keys
 // 3. Find Duplicate keys
 // 4. Find Unused keys and generate script to delete them all at once
-
 
 // MARK: Start Of Configurable Section
 
@@ -18,9 +16,14 @@ import Foundation
 let enabled = true
 
 /*
- Put your path here, example ->  Resources/Localizations/Languages
+ You can skip unused keys detection
  */
-let relativeLocalizableFolders = "/Resources/Languages"
+let skipUnused = false
+
+/*
+ Put your path here, example ->  Resources/Localizations/Languages or Resources
+ */
+let relativeLocalizableFolders = "/Resources"
 
 /*
  This is the path of your source folder which will be used in searching
@@ -59,7 +62,7 @@ let masterLanguage = "en"
 /*
  Sanitizing files will remove comments, empty lines and order your keys alphabetically.
  */
-let sanitizeFiles = false
+let sanitizeFiles = true
 
 /*
  Determines if there are multiple localizations or not.
@@ -68,16 +71,6 @@ let singleLanguage = false
 
 // MARK: End Of Configurable Section
 // MARK: -
-
-
-
-
-
-
-
-
-
-
 
 if enabled == false {
     print("Localization check cancelled")
@@ -105,54 +98,57 @@ func listSupportedLanguages() -> [String] {
     return sl
 }
 
-
 let supportedLanguages = listSupportedLanguages()
-var ignoredFromSameTranslation = [String:[String]]()
+var ignoredFromSameTranslation = [String: [String]]()
 let path = FileManager.default.currentDirectoryPath + relativeLocalizableFolders
 var numberOfWarnings = 0
 var numberOfErrors = 0
 
 struct LocalizationFiles {
     var name = ""
-    var keyValue = [String:String]()
-    var linesNumbers = [String:Int]()
-    
+    var keyValue = [String: String]()
+    var linesNumbers = [String: Int]()
+
     init(name: String) {
         self.name = name
-        process()
+        self.process()
     }
-    
+
     mutating func process() {
+        print("process")
         if sanitizeFiles {
-            removeCommentsFromFile()
-            removeEmptyLinesFromFile()
-            sortLinesAlphabetically()
+            print("process... sanitizeFiles")
+            self.removeCommentsFromFile()
+            self.removeEmptyLinesFromFile()
+            self.sortLinesAlphabetically()
         }
+        print("process2")
         let location = singleLanguage ? "\(path)/Localizable.strings" : "\(path)/\(name).lproj/Localizable.strings"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
-            let lines =  string.components(separatedBy: CharacterSet.newlines)
-            keyValue = [String:String]()
+            let lines = string.components(separatedBy: CharacterSet.newlines)
+            keyValue = [String: String]()
             let pattern = "\"(.*)\" = \"(.+)\";"
             let regex = try? NSRegularExpression(pattern: pattern, options: [])
             var ignoredTranslation = [String]()
-            
+
             for (lineNumber, line) in lines.enumerated() {
-                let range = NSRange(location:0, length:(line as NSString).length)
-                
-                
+                let range = NSRange(location: 0, length: (line as NSString).length)
+
                 // Ignored pattern
                 let ignoredPattern = "\"(.*)\" = \"(.+)\"; *\\/\\/ *ignore-same-translation-warning"
                 let ignoredRegex = try? NSRegularExpression(pattern: ignoredPattern, options: [])
-                if let ignoredMatch = ignoredRegex?.firstMatch(in:line,
-                                                               options: [],
-                                                               range: range) {
-                    let key = (line as NSString).substring(with: ignoredMatch.range(at:1))
+                if let ignoredMatch = ignoredRegex?.firstMatch(
+                    in: line,
+                    options: [],
+                    range: range
+                ) {
+                    let key = (line as NSString).substring(with: ignoredMatch.range(at: 1))
                     ignoredTranslation.append(key)
                 }
                 if let firstMatch = regex?.firstMatch(in: line, options: [], range: range) {
-                    let key = (line as NSString).substring(with: firstMatch.range(at:1))
-                    let value = (line as NSString).substring(with: firstMatch.range(at:2))
-                    if let _ =  keyValue[key] {
+                    let key = (line as NSString).substring(with: firstMatch.range(at: 1))
+                    let value = (line as NSString).substring(with: firstMatch.range(at: 2))
+                    if let _ = keyValue[key] {
                         let str = "\(path)/\(name).lproj"
                             + "/Localizable.strings:\(linesNumbers[key]!): "
                             + "error: [Redundance] \"\(key)\" "
@@ -160,8 +156,8 @@ struct LocalizationFiles {
                         print(str)
                         numberOfErrors += 1
                     } else {
-                        keyValue[key] = value
-                        linesNumbers[key] = lineNumber+1
+                        self.keyValue[key] = value
+                        self.linesNumbers[key] = lineNumber + 1
                     }
                 }
             }
@@ -169,54 +165,55 @@ struct LocalizationFiles {
             ignoredFromSameTranslation[name] = ignoredTranslation
         }
     }
-    
+
     func rebuildFileString(from lines: [String]) -> String {
         return lines.reduce("") { (r: String, s: String) -> String in
-            return (r == "") ? (r + s) : (r + "\n" + s)
+            (r == "") ? (r + s) : (r + "\n" + s)
         }
     }
-    
+
     func removeEmptyLinesFromFile() {
         let location = "\(path)/\(name).lproj/Localizable.strings"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
             var lines = string.components(separatedBy: CharacterSet.newlines)
             lines = lines.filter { $0.trimmingCharacters(in: CharacterSet.whitespaces) != "" }
             let s = rebuildFileString(from: lines)
-            try? s.write(toFile:location, atomically:false, encoding:String.Encoding.utf8)
+            try? s.write(toFile: location, atomically: false, encoding: String.Encoding.utf8)
         }
     }
-    
+
     func removeCommentsFromFile() {
         let location = "\(path)/\(name).lproj/Localizable.strings"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
             var lines = string.components(separatedBy: CharacterSet.newlines)
             lines = lines.filter { !$0.hasPrefix("//") }
             let s = rebuildFileString(from: lines)
-            try? s.write(toFile:location, atomically:false, encoding:String.Encoding.utf8)
+            try? s.write(toFile: location, atomically: false, encoding: String.Encoding.utf8)
         }
     }
-    
+
     func sortLinesAlphabetically() {
+        print("Sanitising")
         let location = "\(path)/\(name).lproj/Localizable.strings"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
             let lines = string.components(separatedBy: CharacterSet.newlines)
-            
+
             var s = ""
-            for (i,l) in sortAlphabetically(lines).enumerated() {
+            for (i, l) in self.sortAlphabetically(lines).enumerated() {
                 s += l
                 if (i != lines.count - 1) {
                     s += "\n"
                 }
             }
-            try? s.write(toFile:location, atomically:false, encoding:String.Encoding.utf8)
+            try? s.write(toFile: location, atomically: false, encoding: String.Encoding.utf8)
         }
     }
-    
-    func removeEmptyLinesFromLines(_ lines:[String]) -> [String] {
+
+    func removeEmptyLinesFromLines(_ lines: [String]) -> [String] {
         return lines.filter { $0.trimmingCharacters(in: CharacterSet.whitespaces) != "" }
     }
-    
-    func sortAlphabetically(_ lines:[String]) -> [String] {
+
+    func sortAlphabetically(_ lines: [String]) -> [String] {
         return lines.sorted()
     }
 }
@@ -231,25 +228,27 @@ let localizationFiles = supportedLanguages
 // MARK: - Detect Unused Keys
 let sourcesPath = FileManager.default.currentDirectoryPath + relativeSourceFolder
 let fileManager = FileManager.default
-let enumerator = fileManager.enumerator(atPath:sourcesPath)
+let enumerator = fileManager.enumerator(atPath: sourcesPath)
 var localizedStrings = [String]()
 while let swiftFileLocation = enumerator?.nextObject() as? String {
     // checks the extension // TODO OBJC?
-    if swiftFileLocation.hasSuffix(".swift") ||  swiftFileLocation.hasSuffix(".m") || swiftFileLocation.hasSuffix(".mm") {
+    if swiftFileLocation.hasSuffix(".swift") || swiftFileLocation.hasSuffix(".m") || swiftFileLocation.hasSuffix(".mm") {
         let location = "\(sourcesPath)/\(swiftFileLocation)"
         if let string = try? String(contentsOfFile: location, encoding: .utf8) {
             for p in patterns {
                 let regex = try? NSRegularExpression(pattern: p, options: [])
-                let range = NSRange(location:0, length:(string as NSString).length) //Obj c wa
-                regex?.enumerateMatches(in: string,
-                                        options: [],
-                                        range: range,
-                                        using: { (result, _, _) in
-                                            if let r = result {
-                                                let value = (string as NSString).substring(with:r.range(at:r.numberOfRanges-1))
-                                                localizedStrings.append(value)
-                                            }
-                })
+                let range = NSRange(location: 0, length: (string as NSString).length) //Obj c wa
+                regex?.enumerateMatches(
+                    in: string,
+                    options: [],
+                    range: range,
+                    using: { (result, _, _) in
+                        if let r = result {
+                            let value = (string as NSString).substring(with: r.range(at: r.numberOfRanges - 1))
+                            localizedStrings.append(value)
+                        }
+                    }
+                )
             }
         }
     }
@@ -263,23 +262,25 @@ let unused = masterKeys.subtracting(usedKeys).subtracting(ignored)
 // Here generate Xcode regex Find and replace script to remove dead keys all at once!
 var replaceCommand = "\"("
 var counter = 0
-for v in unused {
-    var str = "\(path)/\(masterLocalizationfile.name).lproj/Localizable.strings:\(masterLocalizationfile.linesNumbers[v]!): "
-    str += "error: [Unused Key] \"\(v)\" is never used"
-    print(str)
-    numberOfErrors += 1
-    if counter != 0 {
-        replaceCommand += "|"
+
+if (!skipUnused) {
+    for v in unused {
+        var str = "\(path)/\(masterLocalizationfile.name).lproj/Localizable.strings:\(masterLocalizationfile.linesNumbers[v]!): "
+        str += "error: [Unused Key] \"\(v)\" is never used"
+        print(str)
+        numberOfErrors += 1
+        if counter != 0 {
+            replaceCommand += "|"
+        }
+        replaceCommand += v
+        if counter == unused.count - 1 {
+            replaceCommand += ")\" = \".*\";"
+        }
+        counter += 1
     }
-    replaceCommand += v
-    if counter == unused.count-1 {
-        replaceCommand += ")\" = \".*\";"
-    }
-    counter += 1
 }
 
 print(replaceCommand)
-
 
 // MARK: - Compare each translation file against master (en)
 for file in localizationFiles {
@@ -310,4 +311,3 @@ print("Number of errors : \(numberOfErrors)")
 if numberOfErrors > 0 {
     exit(1)
 }
-

@@ -1,0 +1,58 @@
+disabled_rules: # rule identifiers to exclude from running
+  - colon
+  - control_statement
+  - identifier_name
+  - unused_optional_binding
+  - notification_center_detachment
+  - opening_brace
+opt_in_rules: # some rules are only opt-in
+  - empty_count
+  - closure_spacing
+  - fatal_error_message
+  # Find all the available rules by running:
+  # swiftlint rules
+included: # paths to include during linting. `--path` is ignored if present.
+  - Sources
+  - Example/LocalizeExample/Sources
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - Carthage
+  - Pods
+
+# configurable rules can be customized from this configuration file
+# binary rules can set their severity level
+force_cast: warning # implicitly
+force_try:
+  severity: warning # explicitly
+# rules that have both warning and error levels, can set just the warning level
+# implicitly
+line_length: 195
+# they can set both implicitly with an array
+type_body_length:
+  - 350 # warning
+  - 450 # error
+function_body_length:
+  - 60 # warning
+  - 120 # error
+# or they can set both explicitly
+file_length:
+  warning: 800
+  error: 1400
+cyclomatic_complexity:
+  - 16
+# naming rules can set warnings/errors for min_length and max_length
+# additionally they can set excluded names
+type_name:
+  min_length: 3 # only warning
+  max_length: # warning and error
+    warning: 40
+    error: 50
+  excluded: iPhone # excluded via string
+identifier_name:
+  min_length: # only min_length
+    error: 4 # only error
+  excluded: # excluded via string array
+    - id
+    - URL
+    - url
+    - GlobalAPIKey
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit, html, emoji)
