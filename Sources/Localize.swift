@@ -18,7 +18,7 @@ let enabled = true
 /*
  You can skip unused keys detection
  */
-let skipUnused = false
+let skipUnused = true
 
 /*
  Put your path here, example ->  Resources/Localizations/Languages or Resources
