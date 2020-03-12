@@ -289,7 +289,7 @@ for file in localizationFiles {
                 if !ignoredFromSameTranslation[file.name]!.contains(k) {
                     let str = "\(path)/\(file.name).lproj/Localizable.strings"
                         + ":\(file.linesNumbers[k]!): "
-                        + "warning: [Potentialy Untranslated] \"\(k)\""
+                        + "warning: [Potentially Untranslated] \"\(k)\""
                         + "in \(file.name.uppercased()) file doesn't seem to be localized"
                     print(str)
                     numberOfWarnings += 1
