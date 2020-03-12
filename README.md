@@ -45,13 +45,13 @@ Configure the top section of the `Localize.swift` according to your project
 
 ## More
 
-### Ignore [Potentialy Untranslated] warnings
+### Ignore [Potentially Untranslated] warnings
 Just Add `//ignore-same-translation-warning` next to the translation.
 Example :
 ```
 "PhotoKey" = "Photo"; //ignore-same-translation-warning
 ```
-This will take care of ignoring `[Potentialy Untranslated] "XXX" in FR file doesn't seem to be localized`
+This will take care of ignoring `[Potentially Untranslated] "XXX" in FR file doesn't seem to be localized`
 
 ### Unused false positive
 
@@ -73,7 +73,7 @@ let patterns = [
 
 #### Not found by the script reason 2
 Another common pattern is to have keys being built at runtime.
-Of course thoses keys are not present at compile time so the script can't know about them and emits false positive errors.
+Of course those keys are not present at compile time so the script can't know about them and emits false positive errors.
 You can add those keys at the top of of the script to prevent this from happening:
 
 ```swift
