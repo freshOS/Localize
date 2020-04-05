@@ -132,44 +132,49 @@ struct LocalizationFiles {
             sortLinesAlphabetically()
         }
         let location = singleLanguage ? "\(path)/Localizable.strings" : "\(path)/\(name).lproj/Localizable.strings"
-        if let string = try? String(contentsOfFile: location, encoding: .utf8) {
-            let lines = string.components(separatedBy: .newlines)
-            keyValue = [:]
-            let pattern = "\"(.*)\" = \"(.+)\";"
-            let regex = try? NSRegularExpression(pattern: pattern, options: [])
-            var ignoredTranslation: [String] = []
+        guard let string = try? String(contentsOfFile: location, encoding: .utf8) else {
+            return
+        }
 
-            for (lineNumber, line) in lines.enumerated() {
-                let range = NSRange(location: 0, length: (line as NSString).length)
+        let lines = string.components(separatedBy: .newlines)
+        keyValue = [:]
 
-                // Ignored pattern
-                let ignoredPattern = "\"(.*)\" = \"(.+)\"; *\\/\\/ *ignore-same-translation-warning"
-                let ignoredRegex = try? NSRegularExpression(pattern: ignoredPattern, options: [])
-                if let ignoredMatch = ignoredRegex?.firstMatch(in: line,
-                                                               options: [],
-                                                               range: range) {
-                    let key = (line as NSString).substring(with: ignoredMatch.range(at: 1))
-                    ignoredTranslation.append(key)
-                }
-                if let firstMatch = regex?.firstMatch(in: line, options: [], range: range) {
-                    let key = (line as NSString).substring(with: firstMatch.range(at: 1))
-                    let value = (line as NSString).substring(with: firstMatch.range(at: 2))
-                    if let _ = keyValue[key] {
-                        let str = "\(path)/\(name).lproj"
-                            + "/Localizable.strings:\(linesNumbers[key]!): "
-                            + "error: [Redundance] \"\(key)\" "
-                            + "is redundant in \(name.uppercased()) file"
-                        print(str)
-                        numberOfErrors += 1
-                    } else {
-                        keyValue[key] = value
-                        linesNumbers[key] = lineNumber + 1
-                    }
+        let pattern = "\"(.*)\" = \"(.+)\";"
+        let regex = try? NSRegularExpression(pattern: pattern, options: [])
+        var ignoredTranslation: [String] = []
+
+        for (lineNumber, line) in lines.enumerated() {
+            let range = NSRange(location: 0, length: (line as NSString).length)
+
+            // Ignored pattern
+            let ignoredPattern = "\"(.*)\" = \"(.+)\"; *\\/\\/ *ignore-same-translation-warning"
+            let ignoredRegex = try? NSRegularExpression(pattern: ignoredPattern, options: [])
+            if let ignoredMatch = ignoredRegex?.firstMatch(in: line,
+                                                           options: [],
+                                                           range: range) {
+                let key = (line as NSString).substring(with: ignoredMatch.range(at: 1))
+                ignoredTranslation.append(key)
+            }
+
+            if let firstMatch = regex?.firstMatch(in: line, options: [], range: range) {
+                let key = (line as NSString).substring(with: firstMatch.range(at: 1))
+                let value = (line as NSString).substring(with: firstMatch.range(at: 2))
+
+                if keyValue[key] != nil {
+                    let str = "\(path)/\(name).lproj"
+                        + "/Localizable.strings:\(linesNumbers[key]!): "
+                        + "error: [Duplication] \"\(key)\" "
+                        + "is duplicated in \(name.uppercased()) file"
+                    print(str)
+                    numberOfErrors += 1
+                } else {
+                    keyValue[key] = value
+                    linesNumbers[key] = lineNumber + 1
                 }
             }
-            print(ignoredFromSameTranslation)
-            ignoredFromSameTranslation[name] = ignoredTranslation
         }
+        print(ignoredFromSameTranslation)
+        ignoredFromSameTranslation[name] = ignoredTranslation
     }
 
     func rebuildFileString(from lines: [String]) -> String {
@@ -305,6 +310,15 @@ for file in localizationFiles {
             print(str)
             numberOfErrors += 1
         }
+    }
+
+    let redundantKeys = file.keyValue.keys.filter { !masterLocalizationFile.keyValue.keys.contains($0) }
+
+    for k in redundantKeys {
+        let str = "\(path)/\(file.name).lproj/Localizable.strings:\(file.linesNumbers[k]!): "
+            + "error: [Redundant key] \"\(k)\" redundant in \(file.name.uppercased()) file"
+
+        print(str)
     }
 }
 
