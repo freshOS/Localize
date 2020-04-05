@@ -17,7 +17,7 @@ Because **Localization** files tend to **rot over time** and become a hassle to 
 
 ## Try it!
 
-Localize is part of [freshOS](http://freshos.org) iOS toolset. Try it in an example App ! <a class="github-button" href="https://github.com/freshOS/StarterProject/archive/master.zip" data-icon="octicon-cloud-download" data-style="mega" aria-label="Download freshOS/StarterProject on GitHub">Download Starter Project</a>
+Localize is part of [freshOS](https://freshos.github.io/) iOS toolset. Try it out in the included example app!
 
 ## How
 By using a **script** running automatically, you have a **safety net** keeping them **sane**, checking for **translation issues** and preventing then to **rot over time.**
@@ -29,19 +29,21 @@ Automatically (On build)
   - [x] Checks for **Unused Keys**
   - [x] Checks for **Missing Keys**
   - [x] Checks for **Untranslated** (which you can ignore with a flag)
+  - [x] Checks for **Redundant Keys**
+  - [x] Checks for **Duplicate Keys**
 
 ## Installation
 
-Add the following `Run Script` in XCode, this will run the script at every build.
-Use the path of where you copied Localize.swift script
+Add the following `Run Script` in your project's `Build Phases` in XCode, this will run the script at every build.
+Use the path of where you copied `Localize.swift` script.
 
 ```shell
-${SRCROOT}/{REPLACE ME}} # Ex: ${SRCROOT}/Libs/Localize.swift
+${SRCROOT}/{REPLACE ME}} # e.g. ${SRCROOT}/Libs/Localize.swift
 ```
 Run and Enjoy \o/
 
 ## Configuration
-Configure the top section of the `Localize.swift` according to your project
+Configure the top section of the `Localize.swift` according to your project.
 
 ## More
 
@@ -90,7 +92,7 @@ let ignoredFromUnusedKeys = [
 Sacha Durand Saint Omer, sachadso@gmail.com
 
 ## Contributors
-[JuliusBahr](https://github.com/JuliusBahr), [ezisazis](https://github.com/ezisazis/)
+[JuliusBahr](https://github.com/JuliusBahr), [ezisazis](https://github.com/ezisazis/), [michalsrutek](https://github.com/michalsrutek/)
 
 ## Contributing
 
@@ -102,7 +104,7 @@ Localize is available under the MIT license. See [LICENSE](https://github.com/s4
 
 
 # Backers
-Like the project? Offer coffee or support us with a monthly donation and help us continue our activities :) 
+Like the project? Offer coffee or support us with a monthly donation and help us continue our activities :)
 
 <a href="https://opencollective.com/freshos/backer/0/website" target="_blank"><img src="https://opencollective.com/freshos/backer/0/avatar.svg"></a>
 <a href="https://opencollective.com/freshos/backer/1/website" target="_blank"><img src="https://opencollective.com/freshos/backer/1/avatar.svg"></a>
@@ -136,7 +138,7 @@ Like the project? Offer coffee or support us with a monthly donation and help us
 <a href="https://opencollective.com/freshos/backer/29/website" target="_blank"><img src="https://opencollective.com/freshos/backer/29/avatar.svg"></a>
 
 ### Sponsors
-Become a sponsor and get your logo on our README on Github with a link to your site :) 
+Become a sponsor and get your logo on our README on Github with a link to your site :)
 
 <a href="https://opencollective.com/freshos/sponsor/0/website" target="_blank"><img src="https://opencollective.com/freshos/sponsor/0/avatar.svg"></a>
 <a href="https://opencollective.com/freshos/sponsor/1/website" target="_blank"><img src="https://opencollective.com/freshos/sponsor/1/avatar.svg"></a>
