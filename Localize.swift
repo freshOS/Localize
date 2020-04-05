@@ -24,7 +24,7 @@ let relativeLocalizableFolders = "/Resources/Languages"
  This is the path of your source folder which will be used in searching
  for the localization keys you actually use in your project
  */
-let relativeSourceFolder = "/FormaCar"
+let relativeSourceFolder = "/Sources"
 
 /*
  Those are the regex patterns to recognize localizations.
