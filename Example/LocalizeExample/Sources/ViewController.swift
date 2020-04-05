@@ -9,14 +9,12 @@
 import UIKit
 
 class ViewController: UIViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // Here simulates their usage in code
-        let _ = NSLocalizedString("UntranslatedKey", comment: "")
-        let _ = NSLocalizedString("IgnoredUntranslatedKey", comment: "")
-        let _ = NSLocalizedString("MissingKey", comment: "")
+        _ = NSLocalizedString("UntranslatedKey", comment: "")
+        _ = NSLocalizedString("IgnoredUntranslatedKey", comment: "")
+        _ = NSLocalizedString("MissingKey", comment: "")
     }
 }
-
