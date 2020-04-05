@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -16,5 +16,6 @@ class ViewController: UIViewController {
         _ = NSLocalizedString("UntranslatedKey", comment: "")
         _ = NSLocalizedString("IgnoredUntranslatedKey", comment: "")
         _ = NSLocalizedString("MissingKey", comment: "")
+        _ = NSLocalizedString("MissingKeyFromMain", comment: "This key is not present in master translation file")
     }
 }

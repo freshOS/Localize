@@ -64,6 +64,12 @@ let sanitizeFiles = false
  */
 let singleLanguage = false
 
+/*
+ Determines if we should show errors if there's a key within the app
+ that does not appear in master translations.
+*/
+let checkForUntranslated = true
+
 // MARK: End Of Configurable Section
 // MARK: -
 
@@ -219,7 +225,7 @@ struct LocalizationFiles {
 
 // MARK: - Load Localisation Files in memory
 
-let masterLocalizationfile = LocalizationFiles(name: masterLanguage)
+let masterLocalizationFile = LocalizationFiles(name: masterLanguage)
 let localizationFiles = supportedLanguages
     .filter { $0 != masterLanguage }
     .map { LocalizationFiles(name: $0) }
@@ -252,16 +258,17 @@ while let swiftFileLocation = enumerator?.nextObject() as? String {
     }
 }
 
-var masterKeys = Set(masterLocalizationfile.keyValue.keys)
+var masterKeys = Set(masterLocalizationFile.keyValue.keys)
 let usedKeys = Set(localizedStrings)
 let ignored = Set(ignoredFromUnusedKeys)
 let unused = masterKeys.subtracting(usedKeys).subtracting(ignored)
+let untranslated = usedKeys.subtracting(masterKeys)
 
 // Here generate Xcode regex Find and replace script to remove dead keys all at once!
 var replaceCommand = "\"("
 var counter = 0
 for v in unused {
-    var str = "\(path)/\(masterLocalizationfile.name).lproj/Localizable.strings:\(masterLocalizationfile.linesNumbers[v]!): "
+    var str = "\(path)/\(masterLocalizationFile.name).lproj/Localizable.strings:\(masterLocalizationFile.linesNumbers[v]!): "
     str += "error: [Unused Key] \"\(v)\" is never used"
     print(str)
     numberOfErrors += 1
@@ -280,9 +287,9 @@ print(replaceCommand)
 // MARK: - Compare each translation file against master (en)
 
 for file in localizationFiles {
-    for k in masterLocalizationfile.keyValue.keys {
+    for k in masterLocalizationFile.keyValue.keys {
         if let v = file.keyValue[k] {
-            if v == masterLocalizationfile.keyValue[k] {
+            if v == masterLocalizationFile.keyValue[k] {
                 if !ignoredFromSameTranslation[file.name]!.contains(k) {
                     let str = "\(path)/\(file.name).lproj/Localizable.strings"
                         + ":\(file.linesNumbers[k]!): "
@@ -293,11 +300,21 @@ for file in localizationFiles {
                 }
             }
         } else {
-            var str = "\(path)/\(file.name).lproj/Localizable.strings:\(masterLocalizationfile.linesNumbers[k]!): "
+            var str = "\(path)/\(file.name).lproj/Localizable.strings:\(masterLocalizationFile.linesNumbers[k]!): "
             str += "error: [Missing] \"\(k)\" missing from \(file.name.uppercased()) file"
             print(str)
             numberOfErrors += 1
         }
+    }
+}
+
+if checkForUntranslated {
+    for key in untranslated {
+        var str = "\(path)/\(masterLocalizationFile.name).lproj/Localizable.strings:1: "
+        str += "error: [Missing Translation] \(key) is not translated"
+
+        print(str)
+        numberOfErrors += 1
     }
 }
 
