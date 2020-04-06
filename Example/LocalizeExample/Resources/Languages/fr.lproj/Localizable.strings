@@ -1,4 +1,5 @@
 "IgnoredUntranslatedKey" = "OK"; //ignore-same-translation-warning
-"MissingKey" = "Hey! je n'existe pas en espagnol !";
+"MissingKey" = "Hey! je n'existe pas en espagnol!";
 "NeverUsedKey" = "Bonjour I'm never used so you can just get rid of me!";
+"DuplicatedKey" = "Hey, I'm more than once in the master translations!";
 "UntranslatedKey" = "Hey I'm always in english so you need to translate me!";
