@@ -18,5 +18,6 @@ final class ViewController: UIViewController {
         _ = NSLocalizedString("MissingKey", comment: "")
         _ = NSLocalizedString("DuplicatedKey", comment: "")
         _ = NSLocalizedString("MissingKeyFromMain", comment: "This key is not present in master translation file")
+        _ = Localizable.title_test.localized
     }
 }

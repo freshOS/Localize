@@ -34,7 +34,8 @@ let patterns = [
     "Localizations\\.((?:[A-Z]{1}[a-z]*[A-z]*)*(?:\\.[A-Z]{1}[a-z]*[A-z]*)*)", // Laurine Calls
     "L10n.tr\\(key: \"(\\w+)\"", // SwiftGen generation
     "ypLocalized\\(\"(.*)\"\\)",
-    "\"(.*)\".localized" // "key".localized pattern
+    "\"(.*)\".localized", // "key".localized pattern
+    "Localizable\\.((?:[a-z]*[A-z]*)*)\\.localized"
 ]
 
 /*
