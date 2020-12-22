@@ -140,15 +140,17 @@ struct LocalizationFiles {
         let lines = string.components(separatedBy: .newlines)
         keyValue = [:]
 
-        let pattern = "\"(.*)\" = \"(.+)\";"
+        let pattern = "\"(.*)\"=\"(.+)\";"
         let regex = try? NSRegularExpression(pattern: pattern, options: [])
         var ignoredTranslation: [String] = []
 
         for (lineNumber, line) in lines.enumerated() {
+            //white Space Trimmed Line
+            let line = line.replacingOccurrences(of: " ", with: "")
             let range = NSRange(location: 0, length: (line as NSString).length)
 
             // Ignored pattern
-            let ignoredPattern = "\"(.*)\" = \"(.+)\"; *\\/\\/ *ignore-same-translation-warning"
+            let ignoredPattern = "\"(.*)\"=\"(.+)\"; *\\/\\/ *ignore-same-translation-warning"
             let ignoredRegex = try? NSRegularExpression(pattern: ignoredPattern, options: [])
             if let ignoredMatch = ignoredRegex?.firstMatch(in: line,
                                                            options: [],
