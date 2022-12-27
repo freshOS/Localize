@@ -34,7 +34,8 @@ let patterns = [
     "Localizations\\.((?:[A-Z]{1}[a-z]*[A-z]*)*(?:\\.[A-Z]{1}[a-z]*[A-z]*)*)", // Laurine Calls
     "L10n.tr\\(key: \"(\\w+)\"", // SwiftGen generation
     "ypLocalized\\(\"(.*)\"\\)",
-    "\"(.*)\".localized" // "key".localized pattern
+    "\"(.*)\".localized", // "key".localized pattern
+    "Localizable\\.((?:[a-z]*[A-z]*)*)\\.localized"
 ]
 
 /*
@@ -139,15 +140,17 @@ struct LocalizationFiles {
         let lines = string.components(separatedBy: .newlines)
         keyValue = [:]
 
-        let pattern = "\"(.*)\" = \"(.+)\";"
+        let pattern = "\"(.*)\"=\"(.+)\";"
         let regex = try? NSRegularExpression(pattern: pattern, options: [])
         var ignoredTranslation: [String] = []
 
         for (lineNumber, line) in lines.enumerated() {
+            //white Space Trimmed Line
+            let line = line.replacingOccurrences(of: " ", with: "")
             let range = NSRange(location: 0, length: (line as NSString).length)
 
             // Ignored pattern
-            let ignoredPattern = "\"(.*)\" = \"(.+)\"; *\\/\\/ *ignore-same-translation-warning"
+            let ignoredPattern = "\"(.*)\"=\"(.+)\"; *\\/\\/ *ignore-same-translation-warning"
             let ignoredRegex = try? NSRegularExpression(pattern: ignoredPattern, options: [])
             if let ignoredMatch = ignoredRegex?.firstMatch(in: line,
                                                            options: [],
