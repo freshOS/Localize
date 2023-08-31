@@ -32,7 +32,8 @@ let relativeSourceFolder = "/Sources"
 let patterns = [
     "NSLocalized(Format)?String\\(\\s*@?\"([\\w\\.]+)\"", // Swift and Objc Native
     "Localizations\\.((?:[A-Z]{1}[a-z]*[A-z]*)*(?:\\.[A-Z]{1}[a-z]*[A-z]*)*)", // Laurine Calls
-    "L10n.tr\\(key: \"(\\w+)\"", // SwiftGen generation
+    "L10n\\.tr\\(key: \"(\\w+)\"", // SwiftGen generation
+    ".*\"Localizable\", \"(\\w+)\"", // SwiftGen generation
     "ypLocalized\\(\"(.*)\"\\)",
     "\"(.*)\".localized" // "key".localized pattern
 ]
@@ -114,6 +115,7 @@ var ignoredFromSameTranslation: [String: [String]] = [:]
 let path = FileManager.default.currentDirectoryPath + relativeLocalizableFolders
 var numberOfWarnings = 0
 var numberOfErrors = 0
+var usedKeys:Set<String> = []
 
 struct LocalizationFiles {
     var name = ""
@@ -139,15 +141,15 @@ struct LocalizationFiles {
         let lines = string.components(separatedBy: .newlines)
         keyValue = [:]
 
-        let pattern = "\"(.*)\" = \"(.+)\";"
-        let regex = try? NSRegularExpression(pattern: pattern, options: [])
+        let keyValuePattern = "\"(.*)\"\\s*=\\s*\"(.+)\""
+        let regex = try? NSRegularExpression(pattern: keyValuePattern, options: [])
         var ignoredTranslation: [String] = []
 
         for (lineNumber, line) in lines.enumerated() {
             let range = NSRange(location: 0, length: (line as NSString).length)
 
             // Ignored pattern
-            let ignoredPattern = "\"(.*)\" = \"(.+)\"; *\\/\\/ *ignore-same-translation-warning"
+            let ignoredPattern = keyValuePattern + "; *\\/\\/ *ignore-same-translation-warning"
             let ignoredRegex = try? NSRegularExpression(pattern: ignoredPattern, options: [])
             if let ignoredMatch = ignoredRegex?.firstMatch(in: line,
                                                            options: [],
@@ -240,7 +242,6 @@ let localizationFiles = supportedLanguages
 let sourcesPath = FileManager.default.currentDirectoryPath + relativeSourceFolder
 let fileManager = FileManager.default
 let enumerator = fileManager.enumerator(atPath: sourcesPath)
-var localizedStrings: [String] = []
 while let swiftFileLocation = enumerator?.nextObject() as? String {
     // checks the extension
     if swiftFileLocation.hasSuffix(".swift") || swiftFileLocation.hasSuffix(".m") || swiftFileLocation.hasSuffix(".mm") {
@@ -254,8 +255,9 @@ while let swiftFileLocation = enumerator?.nextObject() as? String {
                                         range: range,
                                         using: { result, _, _ in
                                             if let r = result {
-                                                let value = (string as NSString).substring(with: r.range(at: r.numberOfRanges - 1))
-                                                localizedStrings.append(value)
+                                                let match = (string as NSString).substring(with: r.range(at: r.numberOfRanges - 1))
+
+                                                usedKeys.insert(match)
                                             }
                 })
             }
@@ -264,10 +266,9 @@ while let swiftFileLocation = enumerator?.nextObject() as? String {
 }
 
 var masterKeys = Set(masterLocalizationFile.keyValue.keys)
-let usedKeys = Set(localizedStrings)
 let ignored = Set(ignoredFromUnusedKeys)
 let unused = masterKeys.subtracting(usedKeys).subtracting(ignored)
-let untranslated = usedKeys.subtracting(masterKeys)
+let untranslated = masterKeys.subtracting(usedKeys)
 
 // Here generate Xcode regex Find and replace script to remove dead keys all at once!
 var replaceCommand = "\"("
